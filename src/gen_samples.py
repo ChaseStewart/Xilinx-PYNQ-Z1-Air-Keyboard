@@ -9,7 +9,7 @@ pAudio = base.audio
 #print("Init audio")
 
 fs = 44100          # sampling rate, Hz, must be integer
-duration =1.0/20.0   # in seconds, may be float
+duration =1.0/5.0   # in seconds, may be float
 f = 440.0           # sine frequency, Hz, may be float
 
 keys = [184.997, 207.652, 233.082, 277.183, 311.127, 369.994 ]
