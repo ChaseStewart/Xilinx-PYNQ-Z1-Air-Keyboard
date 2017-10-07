@@ -28,9 +28,9 @@ video_in.set(cv2.CAP_PROP_FRAME_HEIGHT, 480 )
 print("Initialize video")
 cap_region_x_begin=0.5  # start point/total width
 cap_region_y_end=0.8  # start point/total width
-threshold = 60  #  BINARY threshold
-blurValue = 41  # GaussianBlur parameter
-bgSubThreshold = 50
+threshold = 120  #  BINARY threshold
+blurValue = 100  # GaussianBlur parameter
+bgSubThreshold = 350
 
 starttime = time()
 # variables
@@ -87,10 +87,10 @@ try:
 			# and update the text
 			for c in contours:
 				# if the contour is too small, ignore it
-				if cv2.contourArea(c) < 1000:
+				if cv2.contourArea(c) < 10000:
 					continue
 				x, y, w, h = cv2.boundingRect(c)
-				cv2.rectangle(outframe, (x, y), (x + w, y + h), (0, 255, 0), 2)
+				cv2.rectangle(outframe, (x, y), (x + w, y + h), (255, 0, 0), 2)
 			
 			hdmi_out.writeframe(outframe)	
 
