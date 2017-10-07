@@ -12,6 +12,12 @@ import imutils
 #from appscript import app
 
 program_is_running = True
+key1 = 0
+key2 = 0
+key3 = 0
+key4 = 0
+key5 = 0
+key6 = 0
 
 base = BaseOverlay("base.bit")
 # initialize output HDMI stream
@@ -91,7 +97,30 @@ try:
 					continue
 				x, y, w, h = cv2.boundingRect(c)
 				cv2.rectangle(outframe, (x, y), (x + w, y + h), (255, 0, 0), 2)
-			
+				M = cv2.moments(c)
+				centroid_x = int(M['m10']/M['m00'])
+				centroid_y = int(M['m01']/M['m00'])
+				print(centroid_x)
+				print(centroid_y)
+				
+				if(centroid_x > 20 and centroid_x < 119 and centroid_y > 120 and centroid_y < 360):
+					key1 = 1
+					cv2.rectangle(outframe,(20,120),(119,360),(0,255,255),2)
+				elif(centroid_x > 120 and centroid_x < 219 and centroid_y > 120 and centroid_y < 360):
+					key2 = 1
+					cv2.rectangle(outframe,(120,120),(219,360),(0,255,255),2)
+				elif(centroid_x > 220 and centroid_x < 319 and centroid_y > 120 and centroid_y < 360):
+					key3 = 1
+					cv2.rectangle(outframe,(220,120),(319,360),(0,255,255),2)
+				elif(centroid_x > 320 and centroid_x < 419 and centroid_y > 120 and centroid_y < 360):
+					key4 = 1
+					cv2.rectangle(outframe,(320,120),(419,360),(0,255,255),2)
+				elif(centroid_x > 420 and centroid_x < 519 and centroid_y > 120 and centroid_y < 360):
+					key5 = 1
+					cv2.rectangle(outframe,(420,120),(519,360),(0,255,255),2)
+				elif(centroid_x > 520 and centroid_x < 639 and centroid_y > 120 and centroid_y < 360):
+					key6 = 1
+					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
 			hdmi_out.writeframe(outframe)	
 
 		#you reached the end of video	
