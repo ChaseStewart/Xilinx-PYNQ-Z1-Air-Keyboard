@@ -20,6 +20,10 @@ key5 = 0
 key6 = 0
 
 base = BaseOverlay("base.bit")
+#initialize audio
+
+audioout = base.audio
+
 # initialize output HDMI stream
 my_mode = VideoMode(640, 480, 24)
 hdmi_out = base.video.hdmi_out
@@ -123,17 +127,23 @@ try:
 					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
 			hdmi_out.writeframe(outframe)	
 			if key1 == 1:
-				print("key1")
+				audioout.load("notes/Gb3.pdm")
+				audioout.play()
 			if key2 == 1:
-				print("key2")
+				audioout.load("notes/Ab4.pdm")
+				audioout.play()
 			if key3 == 1:
-				print("key3")
+				audioout.load("notes/Bb4.pdm")
+				audioout.play()
 			if key4 == 1:
-				print("key4")
+				audioout.load("notes/Db4.pdm")
+				audioout.play()
 			if key5 == 1:
-				print("key5")
+				audioout.load("notes/Eb4.pdm")
+				audioout.play()
 			if key6 == 1:
-				print("key6")
+				audioout.load("notes/Gb4.pdm")
+				audioout.play()
 			
 		#you reached the end of video	
 		else:
@@ -150,6 +160,7 @@ try:
 	hdmi_out.stop()
 	del video_in
 	del hdmi_out
+	del audioout
 	sys.exit()
 
 # TODO we wish this would work but jupyter is handling SIGINT 
@@ -159,6 +170,7 @@ except KeyboardInterrupt:
 	hdmi_out.stop()
 	del hdmi_out
 	del video_in
+	del audioout
 	sys.exit()
 	
 except RuntimeError:
@@ -167,4 +179,5 @@ except RuntimeError:
 	hdmi_out.stop()
 	del hdmi_out
 	del video_in
+	del audioout
 	sys.exit()
