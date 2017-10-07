@@ -122,7 +122,19 @@ try:
 					key6 = 1
 					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
 			hdmi_out.writeframe(outframe)	
-
+			if key1 == 1:
+				#do something
+			if key2 == 1:
+				#do something
+			if key3 == 1:
+				#do something
+			if key4 == 1:
+				#do something
+			if key5 == 1:
+				#do something
+			if key6 == 1:
+				#do something
+			
 		#you reached the end of video	
 		else:
 			print("Failed!")
