@@ -48,6 +48,8 @@ try:
 		if firstFrame is None:
 			outframe = hdmi_out.newframe()
 			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
+			outframe1 = cv2.cvtColor(outframe, cv2.COLOR_RGB2GRAY)
+			outframe1 = imutils.resize(outframe1,height=480,width=640)
 			firstFrame = outframe
 			continue
 			
@@ -61,7 +63,7 @@ try:
 			gray = cv2.cvtColor(outframe, cv2.COLOR_RGB2GRAY)
 			gray = imutils.resize(gray,height=480,width=640)
 			#gray_expanded = gray[:, :, np.newaxis]
-			gray = cv2.GaussianBlur(gray, (21, 21), 0)	
+			#gray = cv2.GaussianBlur(gray, (21, 21), 0)	
 			
 			cv2.rectangle(outframe,(20,120),(119,360),(255,0,0),2)
 			cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
@@ -72,9 +74,9 @@ try:
 			
 			# compute the absolute difference between the current frame and
 			# first frame
-			frameDelta = cv2.absdiff(firstFrame, outframe)
-			thresh = cv2.cvtColor(frameDelta, cv2.COLOR_RGB2GRAY)
-			thresh = cv2.threshold(thresh, 25, 255, cv2.THRESH_BINARY)[1]
+			frameDelta = cv2.absdiff(outframe1, gray)
+			#thresh = cv2.cvtColor(frameDelta, cv2.COLOR_RGB2GRAY)
+			thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
  
 			# dilate the thresholded image to fill in holes, then find contours
 			# on thresholded image
