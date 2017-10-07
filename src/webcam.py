@@ -18,6 +18,7 @@ key3 = 0
 key4 = 0
 key5 = 0
 key6 = 0
+#count = 0
 
 base = BaseOverlay("base.bit")
 #initialize audio
@@ -53,6 +54,7 @@ try:
 	# main loop- grab a frame from webcam, process it, push to HDMI
 	print("Initialize video stream!")
 	while program_is_running == True:
+		start = time()
 		retcode, frame_vga = video_in.read()
 		# if the first frame is None, initialize it
 		if firstFrame is None:
@@ -65,7 +67,7 @@ try:
 			
 		elif retcode == True:
 			outframe = hdmi_out.newframe()
-
+			#count = count + 1
 			# TODO FIXME process image here
 			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
 			
@@ -129,32 +131,44 @@ try:
 			if key1 == 1:
 				audioout.load("notes/Gb3.pdm")
 				audioout.play()
+				#print(1)
 			if key2 == 1:
 				audioout.load("notes/Ab4.pdm")
 				audioout.play()
+				#print(1)
 			if key3 == 1:
 				audioout.load("notes/Bb4.pdm")
 				audioout.play()
+				#print(1)
 			if key4 == 1:
 				audioout.load("notes/Db4.pdm")
 				audioout.play()
+				#print(1)
 			if key5 == 1:
 				audioout.load("notes/Eb4.pdm")
 				audioout.play()
+				#print(1)
 			if key6 == 1:
 				audioout.load("notes/Gb4.pdm")
 				audioout.play()
+				#print(1)
 			
+			#count = count + 1
 		#you reached the end of video	
 		else:
 			print("Failed!")
 			#break
 		
-		if (time()-starttime > 30 ):
+		if (time()-starttime > 40 ):
 			print("Timeout- terminate program")
 			program_is_running = False
 
-	# after 30s, close the stream 
+	# after 30s, close the stream
+	#end = time()
+	#print("Frames is " + str(count))	
+	#print("start is " + str(start))
+	#print("end is " + str(end))
+	#print("Frames/sec : " + str(count / (end - start))) 
 	print("Closing, goodbye!")
 	video_in.release()
 	hdmi_out.stop()
