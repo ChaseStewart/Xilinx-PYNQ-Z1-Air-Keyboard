@@ -71,12 +71,12 @@ try:
 			#gray_expanded = gray[:, :, np.newaxis]
 			#gray = cv2.GaussianBlur(gray, (21, 21), 0)	
 			
-			cv2.rectangle(outframe,(20,180),(119,300),(255,0,0),2)
-			cv2.rectangle(outframe,(120,180),(219,300),(255,0,0),2)
-			cv2.rectangle(outframe,(220,180),(319,300),(255,0,0),2)
-			cv2.rectangle(outframe,(320,180),(419,300),(255,0,0),2)
-			cv2.rectangle(outframe,(420,180),(519,300),(255,0,0),2)
-			cv2.rectangle(outframe,(520,180),(619,300),(255,0,0),2)
+			cv2.rectangle(outframe,(20,120),(119,360),(255,0,0),2)
+			cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
+			cv2.rectangle(outframe,(220,120),(319,360),(255,0,0),2)
+			cv2.rectangle(outframe,(320,120),(419,360),(255,0,0),2)
+			cv2.rectangle(outframe,(420,120),(519,360),(255,0,0),2)
+			cv2.rectangle(outframe,(520,120),(619,360),(255,0,0),2)
 			
 			# compute the absolute difference between the current frame and
 			# first frame
@@ -100,40 +100,40 @@ try:
 				M = cv2.moments(c)
 				centroid_x = int(M['m10']/M['m00'])
 				centroid_y = int(M['m01']/M['m00'])
-				print(centroid_x)
-				print(centroid_y)
+				#print(centroid_x)
+				#print(centroid_y)
 				
-				if(centroid_x > 20 and centroid_x < 119 and centroid_y > 120 and centroid_y < 360):
+				if(centroid_x > 20 and centroid_x < 119 and centroid_y > 180 and centroid_y < 420):
 					key1 = 1
-					cv2.rectangle(outframe,(20,180),(119,300),(0,255,255),2)
-				elif(centroid_x > 120 and centroid_x < 219 and centroid_y > 120 and centroid_y < 360):
+					cv2.rectangle(outframe,(20,120),(119,360),(0,255,255),2)
+				elif(centroid_x > 120 and centroid_x < 219 and centroid_y > 180 and centroid_y < 420):
 					key2 = 1
-					cv2.rectangle(outframe,(120,180),(219,300),(0,255,255),2)
-				elif(centroid_x > 220 and centroid_x < 319 and centroid_y > 120 and centroid_y < 360):
+					cv2.rectangle(outframe,(120,120),(219,360),(0,255,255),2)
+				elif(centroid_x > 220 and centroid_x < 319 and centroid_y > 180 and centroid_y < 420):
 					key3 = 1
-					cv2.rectangle(outframe,(220,180),(319,300),(0,255,255),2)
-				elif(centroid_x > 320 and centroid_x < 419 and centroid_y > 120 and centroid_y < 360):
+					cv2.rectangle(outframe,(220,120),(319,360),(0,255,255),2)
+				elif(centroid_x > 320 and centroid_x < 419 and centroid_y > 180 and centroid_y < 420):
 					key4 = 1
-					cv2.rectangle(outframe,(320,180),(419,300),(0,255,255),2)
-				elif(centroid_x > 420 and centroid_x < 519 and centroid_y > 120 and centroid_y < 360):
+					cv2.rectangle(outframe,(320,120),(419,360),(0,255,255),2)
+				elif(centroid_x > 420 and centroid_x < 519 and centroid_y > 180 and centroid_y < 420):
 					key5 = 1
-					cv2.rectangle(outframe,(420,180),(519,300),(0,255,255),2)
-				elif(centroid_x > 520 and centroid_x < 639 and centroid_y > 120 and centroid_y < 360):
+					cv2.rectangle(outframe,(420,120),(519,360),(0,255,255),2)
+				elif(centroid_x > 520 and centroid_x < 639 and centroid_y > 160 and centroid_y < 430):
 					key6 = 1
-					cv2.rectangle(outframe,(520,180),(639,300),(0,255,255),2)
+					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
 			hdmi_out.writeframe(outframe)	
 			if key1 == 1:
-				print(key1)
+				print("key1")
 			if key2 == 1:
-				print(key2)
+				print("key2")
 			if key3 == 1:
-				print(key3)
+				print("key3")
 			if key4 == 1:
-				print(key4)
+				print("key4")
 			if key5 == 1:
-				print(key5)
+				print("key5")
 			if key6 == 1:
-				print(key6)
+				print("key6")
 			
 		#you reached the end of video	
 		else:
