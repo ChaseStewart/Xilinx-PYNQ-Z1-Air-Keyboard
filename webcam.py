@@ -6,6 +6,9 @@ import sys, cv2, math, copy
 from time import time
 import numpy as np
 import asyncio
+import datetime
+import imutils
+
 #from appscript import app
 
 program_is_running = True
@@ -33,40 +36,72 @@ starttime = time()
 # variables
 isBgCaptured = 0   # bool, whether the background captured
 triggerSwitch = False  # if true, keyborad simulator works
+# initialize the first frame in the video stream
+firstFrame = None
 
 try:
 	# main loop- grab a frame from webcam, process it, push to HDMI
 	print("Initialize video stream!")
 	while program_is_running == True:
 		retcode, frame_vga = video_in.read()
-		if retcode == True:
+		# if the first frame is None, initialize it
+		if firstFrame is None:
+			outframe = hdmi_out.newframe()
+			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
+			firstFrame = outframe
+			continue
+			
+		elif retcode == True:
 			outframe = hdmi_out.newframe()
 
-			#bgModel = cv2.BackgroundSubtractorMOG2(0, bgSubThreshold)
-			#isBgCaptured = 1
-			#print("Background Captured")
 			# TODO FIXME process image here
 			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
-
+			
+			#outframe = imutils.resize(outframe, width=500)
+			gray = cv2.cvtColor(outframe, cv2.COLOR_RGB2GRAY)
+			gray = imutils.resize(gray,height=480,width=640)
+			#gray_expanded = gray[:, :, np.newaxis]
+			gray = cv2.GaussianBlur(gray, (21, 21), 0)	
+			
 			cv2.rectangle(outframe,(20,120),(119,360),(255,0,0),2)
 			cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
 			cv2.rectangle(outframe,(220,120),(319,360),(255,0,0),2)
 			cv2.rectangle(outframe,(320,120),(419,360),(255,0,0),2)
 			cv2.rectangle(outframe,(420,120),(519,360),(255,0,0),2)
 			cv2.rectangle(outframe,(520,120),(619,360),(255,0,0),2)
-			hdmi_out.writeframe(outframe)
-			#bgModel = None
-			#triggerSwitch = False
-			#isBgCaptured = 0
-			#print("Reset BackGround")
+			
+			# compute the absolute difference between the current frame and
+			# first frame
+			frameDelta = cv2.absdiff(firstFrame, outframe)
+			thresh = cv2.cvtColor(frameDelta, cv2.COLOR_RGB2GRAY)
+			thresh = cv2.threshold(thresh, 25, 255, cv2.THRESH_BINARY)[1]
+ 
+			# dilate the thresholded image to fill in holes, then find contours
+			# on thresholded image
+			thresh = cv2.dilate(thresh, None, iterations=2)
+			(im2, contours, hierarchy) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+			 
+			# compute the bounding box for the contour, draw it on the frame,
+			# and update the text
+			for c in contours:
+				# if the contour is too small, ignore it
+				if cv2.contourArea(c) < 1000:
+					continue
+				x, y, w, h = cv2.boundingRect(c)
+				cv2.rectangle(outframe, (x, y), (x + w, y + h), (0, 255, 0), 2)
+			
+			hdmi_out.writeframe(outframe)	
+
+		#you reached the end of video	
 		else:
 			print("Failed!")
+			#break
 		
-		if (time()-starttime > 20 ):
+		if (time()-starttime > 30 ):
 			print("Timeout- terminate program")
 			program_is_running = False
 
-	# after 20s, close the stream 
+	# after 30s, close the stream 
 	print("Closing, goodbye!")
 	video_in.release()
 	hdmi_out.stop()
@@ -76,6 +111,14 @@ try:
 
 # TODO we wish this would work but jupyter is handling SIGINT 
 except KeyboardInterrupt:
+	print("Goodbye")
+	video_in.release()
+	hdmi_out.stop()
+	del hdmi_out
+	del video_in
+	sys.exit()
+	
+except RuntimeError:
 	print("Goodbye")
 	video_in.release()
 	hdmi_out.stop()
