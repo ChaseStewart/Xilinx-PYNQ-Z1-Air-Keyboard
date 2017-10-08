@@ -1,0 +1,28 @@
+OpenCV Air Keyboard
+
+Git: https://github.com/ChaseStewart/XilinxPynqHackathon2017
+
+This is a Virtual Piano player built on a Xilinx FPGA PYNQ board The project demonstrates real time audio/video processing capabililties of the board
+
+The project revolves around PYNQ. We have used OpenCV to process video and PYNQ's Audio pipeline to stream Audio Output. We use Logitech Camera to stream Video at 720p and process it. The Monitor displays the virtual Keyboard on which user can point to the key to be pressed. The PYNQ detects the motion, extracts the image and contours it. It looks into the predefined data base and maps correct note to the corresponding key and loads it to the audio buffer which is streamed out of AUDIO out.
+
+Hardware Requirements
+
+1. Xilinx PYNQ Z1
+2. Logitech Camera
+3. HDMI Monitor
+
+Software Requirements
+
+1. Python3.x
+2. OpenCV package
+3. Common Python packages(Eg: numpy)
+4. Jupyter
+
+Future Expansions
+
+1. Implement MIDI
+2. Background Substraction (evrything except finger tip)
+3. Faster Frame Rate, GPU integration
+4. Audio Output Noise Cancelation
+
