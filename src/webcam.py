@@ -9,17 +9,6 @@ import datetime
 import imutils
 import threading 
 
-
-# key variables
-key1 = 0
-key2 = 0
-key3 = 0
-key4 = 0
-key5 = 0
-key6 = 0
-key7 = 0
-key8 = 0
-
 # audio states
 PLAY_NOTHING = 0
 PLAY_KEY_1   = 1
@@ -36,9 +25,9 @@ IS_RUNNING = 0
 IS_STOPPED = 1
 
 # program state variables
-audio_life_state = IS_RUNNING
+audio_life_state   = IS_RUNNING
 program_is_running = IS_RUNNING
-audio_out_state = PLAY_NOTHING
+audio_out_state    = PLAY_NOTHING
 
 DEBUG = False
 
@@ -83,7 +72,7 @@ def start_audio():
 		elif audio_out_state == PLAY_NOTHING:
 			pass
 		
-		sleep(0.00001)
+		sleep(0.0000001)
 
 	print("Program is over, killing thread")
 	return
@@ -115,8 +104,9 @@ blurValue = 100         # GaussianBlur parameter
 bgSubThreshold = 350
 
 starttime = time()
+
 # variables
-isBgCaptured = 0   # bool, whether the background captured
+isBgCaptured = 0       # bool, whether the background captured
 triggerSwitch = False  # if true, keyborad simulator works
 
 # initialize the first frame in the video stream
@@ -131,7 +121,6 @@ img_un_alpha = img_unpressed[:,:,3]/255.0
 img_pressed = cv2.imread("pics/pressed.png",-1)
 pressed_height,pressed_width = img_pressed.shape[:2]
 print("Initialize video stream!")
-
 
 try:
 	""" 
@@ -159,16 +148,6 @@ try:
 		elif retcode == True:
 			outframe = hdmi_out.newframe()
 		
-			# within the loop, set keys back to 0	
-			key1 = 0
-			key2 = 0
-			key3 = 0
-			key4 = 0
-			key5 = 0
-			key6 = 0
-			key7 = 0
-			key8 = 0
-
 			# create a copy-frame to manipulate 
 			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
 			
@@ -199,7 +178,8 @@ try:
 				if cv2.contourArea(c) < 10000:
 					continue
 				x, y, w, h = cv2.boundingRect(c)
-				cv2.rectangle(outframe, (x, y), (x + w, y + h), (255, 0, 0), 2)
+				if DEBUG:
+					cv2.rectangle(outframe, (x, y), (x + w, y + h), (255, 0, 0), 2)
 				M = cv2.moments(c)
 
 				"""
@@ -216,68 +196,55 @@ try:
 			
 
 				# if the centroid is within a key, update audio state
-				if(centroid_x > 20 and centroid_x < 95  and centroid_y > 180 and centroid_y < 420):
-					key1 = 1
-					cv2.rectangle(outframe,(20,120),(95,360),(0,255,255),2)
-				elif(centroid_x > 95 and centroid_x < 170 and centroid_y > 180 and centroid_y < 420):
-					key2 = 1
-					cv2.rectangle(outframe,(95,120),(170,360),(255,0,255),2)
-				elif(centroid_x > 170 and centroid_x < 245 and centroid_y > 180 and centroid_y < 420):
-					key3 = 1
-					cv2.rectangle(outframe,(170,120),(245,360),(255,255,0),2)
-				elif(centroid_x > 245 and centroid_x < 320 and centroid_y > 180 and centroid_y < 420):
-					key4 = 1
-					cv2.rectangle(outframe,(245,120),(320,360),(255,0,0),2)
-				elif(centroid_x > 320 and centroid_x < 395 and centroid_y > 180 and centroid_y < 420):
-					key5 = 1
-					cv2.rectangle(outframe,(320,120),(395,360),(0,255,0),2)
-				elif(centroid_x > 395 and centroid_x < 470 and centroid_y > 160 and centroid_y < 430):
-					key6 = 1
-					cv2.rectangle(outframe,(395,120),(470,360),(0,255,255),2)
-				elif(centroid_x > 470 and centroid_x < 545 and centroid_y > 160 and centroid_y < 430):
-					key7 = 1
-					cv2.rectangle(outframe,(470,120),(545,360),(255,0,255),2)
-				elif(centroid_x > 545 and centroid_x < 620 and centroid_y > 160 and centroid_y < 430):
-					key8 = 1
-					cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
 
+				# detect key 1 
+				if(centroid_x > 20 and centroid_x < 95  and centroid_y > 180 and centroid_y < 420):
+					audio_out_state = PLAY_KEY_1
+					cv2.rectangle(outframe,(20,120),(95,360),(0,255,255),2)
+				# detect key 2 
+				elif(centroid_x > 95 and centroid_x < 170 and centroid_y > 180 and centroid_y < 420):
+					audio_out_state = PLAY_KEY_2
+					cv2.rectangle(outframe,(95,120),(170,360),(255,0,255),2)
+				# detect key 3
+				elif(centroid_x > 170 and centroid_x < 245 and centroid_y > 180 and centroid_y < 420):
+					audio_out_state = PLAY_KEY_3
+					cv2.rectangle(outframe,(170,120),(245,360),(255,255,0),2)
+				# detect key 4
+				elif(centroid_x > 245 and centroid_x < 320 and centroid_y > 180 and centroid_y < 420):
+					audio_out_state = PLAY_KEY_4
+					cv2.rectangle(outframe,(245,120),(320,360),(255,0,0),2)
+				# detect key 5
+				elif(centroid_x > 320 and centroid_x < 395 and centroid_y > 180 and centroid_y < 420):
+					audio_out_state = PLAY_KEY_5
+					cv2.rectangle(outframe,(320,120),(395,360),(0,255,0),2)
+				# detect key 6
+				elif(centroid_x > 395 and centroid_x < 470 and centroid_y > 160 and centroid_y < 430):
+					audio_out_state = PLAY_KEY_6
+					cv2.rectangle(outframe,(395,120),(470,360),(0,255,255),2)
+				# detect key 7
+				elif(centroid_x > 470 and centroid_x < 545 and centroid_y > 160 and centroid_y < 430):
+					audio_out_state = PLAY_KEY_7
+					cv2.rectangle(outframe,(470,120),(545,360),(255,0,255),2)
+				# detect key 8
+				elif(centroid_x > 545 and centroid_x < 620 and centroid_y > 160 and centroid_y < 430):
+					audio_out_state = PLAY_KEY_8
+					cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
+				# else play nothing 
+				else:
+					audio_out_state = PLAY_NOTHING
 
 			hdmi_out.writeframe(outframe)	
-			if key1 == 1:
-				audio_out_state = PLAY_KEY_1
 
-			elif key2 == 1:
-				audio_out_state = PLAY_KEY_2
-
-			elif key3 == 1:
-				audio_out_state = PLAY_KEY_3
-
-			elif key4 == 1:
-				audio_out_state = PLAY_KEY_4
-
-			elif key5 == 1:
-				audio_out_state = PLAY_KEY_5
-
-			elif key6 == 1:
-				audio_out_state = PLAY_KEY_6
-			
-			elif key7 == 1:
-				audio_out_state = PLAY_KEY_7
-			
-			elif key8 == 1:
-				audio_out_state = PLAY_KEY_8
-
-			else:
-				audio_out_state = PLAY_NOTHING
-
-		#you reached the end of video	
+		# If capturing a frame fails. print a debug
 		else:
 			print("Failed!")
 			#break
 		
+		# Run for 40s, then break
 		if (time()-starttime > 40 ):
 			print("Timeout- terminate program")
 			program_is_running = False
+			audio_life_state = IS_STOPPED
 
 	# after 30s, close the stream
 	audio_life_state = IS_STOPPED
@@ -287,8 +254,6 @@ try:
 	hdmi_out.stop()
 	del video_in
 	del hdmi_out
-
-	#del audioout
 	sys.exit()
 
 # TODO we wish this would work but jupyter is handling SIGINT 
@@ -299,9 +264,9 @@ except KeyboardInterrupt:
 	hdmi_out.stop()
 	del hdmi_out
 	del video_in
-	#del audioout
 	sys.exit()
 	
+# exit gracefully in case of a runtime error 
 except RuntimeError as e:
 	print("Goodbye:runtime")
 	print(e)
