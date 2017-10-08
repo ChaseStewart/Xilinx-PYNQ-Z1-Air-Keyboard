@@ -26,7 +26,7 @@ At the lower (yet abstracted level), we make use of overlays or bitstreams, whic
 ### Citation
 ```
 It relies heavily on the work of Adrian Rosebrock to do motion detection from video.
-https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv
+(https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv/)
 ```
 
 ### Licencing
