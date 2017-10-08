@@ -30,6 +30,18 @@ program_is_running = IS_RUNNING
 audio_out_state    = PLAY_NOTHING
 
 DEBUG = False
+KEYS = False
+
+
+class NullDevice():
+	"""
+	dummy to eat up stdout, thanks to coreygoldberg.blogspot.com!
+	http://coreygoldberg.blogspot.com/2009/05/python-redirect-or-turn-off-stdout-and.html
+	"""
+	def write(self,s):
+		pass
+
+
 
 def start_audio():
 	"""
@@ -122,6 +134,12 @@ img_pressed = cv2.imread("pics/pressed.png",-1)
 pressed_height,pressed_width = img_pressed.shape[:2]
 print("Initialize video stream!")
 
+original_stdout = sys.stdout
+sys.stdout = NullDevice()
+
+original_stderr = sys.stderr
+sys.stderr = NullDevice()
+
 try:
 	""" 
 	main loop- grab a frame from webcam, process it, push to HDMI
@@ -157,9 +175,10 @@ try:
 			alpha_out = 1-img_un_alpha
 
 			# draw 8 keys on the screen 
-			for i in range(8):
-				for c in range(3):
-					outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c] = (img_un_alpha * img_unpressed[:,:,c]+alpha_out*outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c])
+			if KEYS:
+				for i in range(8):
+					for c in range(3):
+						outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c] = (img_un_alpha * img_unpressed[:,:,c]+alpha_out*outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c])
 			
 			# compute the absolute difference between the current frame and
 			# first frame
@@ -196,42 +215,42 @@ try:
 			
 
 				# if the centroid is within a key, update audio state
-
+				if(centroid_y > 180 and centroid_y < 420):
 				# detect key 1 
-				if(centroid_x > 20 and centroid_x < 95  and centroid_y > 180 and centroid_y < 420):
-					audio_out_state = PLAY_KEY_1
-					cv2.rectangle(outframe,(20,120),(95,360),(0,255,255),2)
-				# detect key 2 
-				elif(centroid_x > 95 and centroid_x < 170 and centroid_y > 180 and centroid_y < 420):
-					audio_out_state = PLAY_KEY_2
-					cv2.rectangle(outframe,(95,120),(170,360),(255,0,255),2)
-				# detect key 3
-				elif(centroid_x > 170 and centroid_x < 245 and centroid_y > 180 and centroid_y < 420):
-					audio_out_state = PLAY_KEY_3
-					cv2.rectangle(outframe,(170,120),(245,360),(255,255,0),2)
-				# detect key 4
-				elif(centroid_x > 245 and centroid_x < 320 and centroid_y > 180 and centroid_y < 420):
-					audio_out_state = PLAY_KEY_4
-					cv2.rectangle(outframe,(245,120),(320,360),(255,0,0),2)
-				# detect key 5
-				elif(centroid_x > 320 and centroid_x < 395 and centroid_y > 180 and centroid_y < 420):
-					audio_out_state = PLAY_KEY_5
-					cv2.rectangle(outframe,(320,120),(395,360),(0,255,0),2)
-				# detect key 6
-				elif(centroid_x > 395 and centroid_x < 470 and centroid_y > 160 and centroid_y < 430):
-					audio_out_state = PLAY_KEY_6
-					cv2.rectangle(outframe,(395,120),(470,360),(0,255,255),2)
-				# detect key 7
-				elif(centroid_x > 470 and centroid_x < 545 and centroid_y > 160 and centroid_y < 430):
-					audio_out_state = PLAY_KEY_7
-					cv2.rectangle(outframe,(470,120),(545,360),(255,0,255),2)
-				# detect key 8
-				elif(centroid_x > 545 and centroid_x < 620 and centroid_y > 160 and centroid_y < 430):
-					audio_out_state = PLAY_KEY_8
-					cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
-				# else play nothing 
-				else:
-					audio_out_state = PLAY_NOTHING
+					if(centroid_x > 20 and centroid_x < 95):
+						audio_out_state = PLAY_KEY_1
+						cv2.rectangle(outframe,(20,120),(95,360),(0,255,255),2)
+					# detect key 2 
+					elif(centroid_x < 170):
+						audio_out_state = PLAY_KEY_2
+						cv2.rectangle(outframe,(95,120),(170,360),(255,0,255),2)
+					# detect key 3
+					elif(centroid_x < 245):
+						audio_out_state = PLAY_KEY_3
+						cv2.rectangle(outframe,(170,120),(245,360),(255,255,0),2)
+					# detect key 4
+					elif(centroid_x < 320):
+						audio_out_state = PLAY_KEY_4
+						cv2.rectangle(outframe,(245,120),(320,360),(255,0,0),2)
+					# detect key 5
+					elif(centroid_x < 395):
+						audio_out_state = PLAY_KEY_5
+						cv2.rectangle(outframe,(320,120),(395,360),(0,255,0),2)
+					# detect key 6
+					elif(centroid_x < 470):
+						audio_out_state = PLAY_KEY_6
+						cv2.rectangle(outframe,(395,120),(470,360),(0,255,255),2)
+					# detect key 7
+					elif(centroid_x < 545):
+						audio_out_state = PLAY_KEY_7
+						cv2.rectangle(outframe,(470,120),(545,360),(255,0,255),2)
+					# detect key 8
+					elif(centroid_x < 620):
+						audio_out_state = PLAY_KEY_8
+						cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
+					# else play nothing 
+					else:
+						audio_out_state = PLAY_NOTHING
 
 			hdmi_out.writeframe(outframe)	
 
@@ -241,9 +260,11 @@ try:
 			#break
 		
 		# Run for 40s, then break
-		if (time()-starttime > 40 ):
+		if (time()-starttime > 600 ):
+			sys.stdout = original_stdout
+			sys.stderr = original_stderr
 			print("Timeout- terminate program")
-			program_is_running = False
+			program_is_running = IS_STOPPED
 			audio_life_state = IS_STOPPED
 
 	# after 30s, close the stream
