@@ -4,10 +4,10 @@
 
 ### Team Members
 ```
-Chase Stewart 
-Snehal Sanghvi 
-Spencer Arrasmith
-Akshit Shah
+*Chase Stewart *
+*Snehal Sanghvi *
+*Spencer Arrasmith *
+*Akshit Shah *
 ```
 
 ### Description
@@ -32,6 +32,6 @@ we hope other developers will build of of this code and suggest us on how to imp
 
 ### RunMe:
 ```
-1> sudo python3.6 gen_samples.py
-2> sudo python3.6 webcam.py
+$ sudo python3.6 gen_samples.py
+$ sudo python3.6 webcam.py
 ```
