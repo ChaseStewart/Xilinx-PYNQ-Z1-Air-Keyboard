@@ -23,6 +23,12 @@ For purpose of demonstration for the hackathon, we designed 8 discrete keys that
 At the lower (yet abstracted level), we make use of overlays or bitstreams, which are essentially equivalent to IP cores in the more traditional sense of FPGAs. Using the Base overlay of the Pynq board, a lot of the lower level headaches of FPGAs has been removed. The audio files essentially have musical notes of pre-defined frequencies that make use of the Audio module. Getting the audio and video modules to work concurrently was a challenge and the use of threads made this application smooth, functional and more modular in general.
 ```
 
+### Citation
+```
+It relies heavily on the work of Adrian Rosebrock to do motion detection from video.
+https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv
+```
+
 ### Licencing
 ```
 This code is Open-Sourced and is compatible with the Jupyter notebook project. 
