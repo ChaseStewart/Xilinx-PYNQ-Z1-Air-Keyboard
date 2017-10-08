@@ -3,11 +3,12 @@ from pynq.lib.video import *
 from pynq import PL
 from PIL import Image as PIL_Image
 import sys, cv2, math, copy
-from time import time
+from time import time, sleep
 import numpy as np
 import asyncio
 import datetime
 import imutils
+import threading 
 
 #from appscript import app
 
@@ -18,12 +19,65 @@ key3 = 0
 key4 = 0
 key5 = 0
 key6 = 0
-#count = 0
+key7 = 0
+key8 = 0
 
+PLAY_NOTHING = 0
+PLAY_KEY_1   = 1
+PLAY_KEY_2   = 2
+PLAY_KEY_3   = 3 
+PLAY_KEY_4   = 4
+PLAY_KEY_5   = 5
+PLAY_KEY_6   = 6
+PLAY_KEY_7   = 7
+PLAY_KEY_8   = 8
+
+#count = 0
+audio_out_state = PLAY_NOTHING
 base = BaseOverlay("base.bit")
 #initialize audio
 
 audioout = base.audio
+
+def start_audio():
+	while 1:
+		if (audio_out_state) == PLAY_NOTHING:
+			pass 
+
+		elif (audio_out_state) == PLAY_KEY_1:
+			audioout.load("notes/Ab4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_2:
+			audioout.load("notes/Bb4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_3:
+			audioout.load("notes/Db4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_4:
+			audioout.load("notes/Eb4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_5:
+			audioout.load("notes/Gb4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_6:
+			audioout.load("notes/Ab4.pdm")
+			audioout.play()
+
+		elif (audio_out_state) == PLAY_KEY_7:
+			audioout.load("notes/Bb4.pdm")
+			audioout.play()
+		
+		elif (audio_out_state) == PLAY_KEY_8:
+			audioout.load("notes/Db5.pdm")
+			audioout.play()
+	
+		print("Woke up thread")	
+		sleep(0.01)
 
 # initialize output HDMI stream
 my_mode = VideoMode(640, 480, 24)
@@ -53,6 +107,10 @@ firstFrame = None
 try:
 	# main loop- grab a frame from webcam, process it, push to HDMI
 	print("Initialize video stream!")
+
+	t = threading.Thread(target=start_audio)
+	t.start()
+
 	while program_is_running == True:
 		start = time()
 		retcode, frame_vga = video_in.read()
@@ -68,6 +126,17 @@ try:
 		elif retcode == True:
 			outframe = hdmi_out.newframe()
 			#count = count + 1
+			
+			key1 = 0
+			key2 = 0
+			key3 = 0
+			key4 = 0
+			key5 = 0
+			key6 = 0
+			key7 = 0
+			key8 = 0
+
+
 			# TODO FIXME process image here
 			outframe[0:480, 0:640,:] = frame_vga[0:480,0:640,:]
 			
@@ -129,31 +198,32 @@ try:
 					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
 			hdmi_out.writeframe(outframe)	
 			if key1 == 1:
-				audioout.load("notes/Gb3.pdm")
-				audioout.play()
-				#print(1)
-			if key2 == 1:
-				audioout.load("notes/Ab4.pdm")
-				audioout.play()
-				#print(1)
-			if key3 == 1:
-				audioout.load("notes/Bb4.pdm")
-				audioout.play()
-				#print(1)
-			if key4 == 1:
-				audioout.load("notes/Db4.pdm")
-				audioout.play()
-				#print(1)
-			if key5 == 1:
-				audioout.load("notes/Eb4.pdm")
-				audioout.play()
-				#print(1)
-			if key6 == 1:
-				audioout.load("notes/Gb4.pdm")
-				audioout.play()
-				#print(1)
+				audio_out_state = PLAY_KEY_1
+
+			elif key2 == 1:
+				audio_out_state = PLAY_KEY_2
+
+			elif key3 == 1:
+				audio_out_state = PLAY_KEY_3
+
+			elif key4 == 1:
+				audio_out_state = PLAY_KEY_4
+
+			elif key5 == 1:
+				audio_out_state = PLAY_KEY_5
+
+			elif key6 == 1:
+				audio_out_state = PLAY_KEY_6
 			
-			#count = count + 1
+			elif key7 == 1:
+				audio_out_state = PLAY_KEY_7
+			
+			elif key8 == 1:
+				audio_out_state = PLAY_KEY_8
+
+			else:
+				audio_out_state = PLAY_NOTHING
+
 		#you reached the end of video	
 		else:
 			print("Failed!")
@@ -164,34 +234,34 @@ try:
 			program_is_running = False
 
 	# after 30s, close the stream
-	#end = time()
-	#print("Frames is " + str(count))	
-	#print("start is " + str(start))
-	#print("end is " + str(end))
-	#print("Frames/sec : " + str(count / (end - start))) 
 	print("Closing, goodbye!")
 	video_in.release()
 	hdmi_out.stop()
 	del video_in
 	del hdmi_out
-	del audioout
+	t.join()
+
+	#del audioout
 	sys.exit()
 
 # TODO we wish this would work but jupyter is handling SIGINT 
 except KeyboardInterrupt:
-	print("Goodbye")
+	print("Goodbye:keyboard")
 	video_in.release()
 	hdmi_out.stop()
 	del hdmi_out
 	del video_in
-	del audioout
+	t.join()
+	#del audioout
 	sys.exit()
 	
-except RuntimeError:
-	print("Goodbye")
+except RuntimeError as e:
+	print("Goodbye:runtime")
+	print(e)
 	video_in.release()
 	hdmi_out.stop()
 	del hdmi_out
 	del video_in
-	del audioout
+	t.join()
+	#del audioout
 	sys.exit()
