@@ -248,9 +248,9 @@ try:
 					elif(centroid_x < 620):
 						audio_out_state = PLAY_KEY_8
 						cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
-					# else play nothing 
-					else:
-						audio_out_state = PLAY_NOTHING
+				# else play nothing 
+				else:
+					audio_out_state = PLAY_NOTHING
 
 			hdmi_out.writeframe(outframe)	
 
