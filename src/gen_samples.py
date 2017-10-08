@@ -12,8 +12,8 @@ fs = 44100          # sampling rate, Hz, must be integer
 duration =1.0/5.0   # in seconds, may be float
 f = 440.0           # sine frequency, Hz, may be float
 
-keys = [184.997, 207.652, 233.082, 277.183, 311.127, 369.994 ]
-filenames = ["Gb3.pdm", "Ab4.pdm", "Bb4.pdm", "Db4.pdm", "Eb4.pdm", "Gb4.pdm" ]
+keys = [184.997, 207.652, 233.082, 277.183, 311.127, 369.994, 830.609, 932.328 ]
+filenames = ["Gb3.pdm", "Ab4.pdm", "Bb4.pdm", "Db4.pdm", "Eb4.pdm", "Gb4.pdm", "Ab5.pdm", "Bb5.pdm" ]
 
 num_samples = int(duration*fs)
 

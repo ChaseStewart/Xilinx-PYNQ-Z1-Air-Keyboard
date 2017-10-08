@@ -104,6 +104,22 @@ triggerSwitch = False  # if true, keyborad simulator works
 # initialize the first frame in the video stream
 firstFrame = None
 
+img_unpressed = cv2.imread("pics/unpressed.png",-1)
+img_unpressed = cv2.resize(img_unpressed,(100,240),interpolation = cv2.INTER_AREA)
+#img_unpressed_mask = img_unpressed[:,:,3]
+#img_unpressed_mask_inv = cv2.bitwise_not(img_unpressed_mask)
+#img_unpressed = img_unpressed[:,:,0:3]
+unpressed_height,unpressed_width = img_unpressed.shape[:2]
+img_un_alpha = img_unpressed[:,:,3]/255.0
+
+
+img_pressed = cv2.imread("pics/pressed.png",-1)
+#img_pressed_mask = img_pressed[:,:,3]
+#img_pressed_mask_inv = cv2.bitwise_not(img_pressed_mask)
+#img_pressed = img_pressed[:,:,0:3]
+pressed_height,pressed_width = img_pressed.shape[:2]
+
+
 try:
 	# main loop- grab a frame from webcam, process it, push to HDMI
 	print("Initialize video stream!")
@@ -146,12 +162,19 @@ try:
 			#gray_expanded = gray[:, :, np.newaxis]
 			#gray = cv2.GaussianBlur(gray, (21, 21), 0)	
 			
-			cv2.rectangle(outframe,(20,120),(119,360),(255,0,0),2)
-			cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
-			cv2.rectangle(outframe,(220,120),(319,360),(255,0,0),2)
-			cv2.rectangle(outframe,(320,120),(419,360),(255,0,0),2)
-			cv2.rectangle(outframe,(420,120),(519,360),(255,0,0),2)
-			cv2.rectangle(outframe,(520,120),(619,360),(255,0,0),2)
+			#cv2.rectangle(outframe,(20,120),(119,360),(255,0,0),2)
+			#mask1 = cv2.resize(unpressed_max, (unpressed_width,unpressed_height))
+			#mask1_inv = cv2.resize(unpressed_mask_inv, (unpressed_width,unpressed_height))
+			alpha_out = 1-img_un_alpha
+
+			for i in range(6):
+				for c in range(3):
+					outframe[120:120+unpressed_height,18+100*i:18+unpressed_width+100*i,c] = (img_un_alpha * img_unpressed[:,:,c]+alpha_out*outframe[120:120+unpressed_height,18+100*i:18+unpressed_width+100*i,c])
+			#cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
+			#cv2.rectangle(outframe,(220,120),(319,360),(255,0,0),2)
+			#cv2.rectangle(outframe,(320,120),(419,360),(255,0,0),2)
+			#cv2.rectangle(outframe,(420,120),(519,360),(255,0,0),2)
+			#cv2.rectangle(outframe,(520,120),(619,360),(255,0,0),2)
 			
 			# compute the absolute difference between the current frame and
 			# first frame
