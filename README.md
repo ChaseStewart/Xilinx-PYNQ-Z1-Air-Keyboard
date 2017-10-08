@@ -4,10 +4,10 @@
 
 ### Team Members
 ```
-*Chase Stewart *
-*Snehal Sanghvi *
-*Spencer Arrasmith *
-*Akshit Shah *
+*Chase Stewart*
+*Snehal Sanghvi*
+*Spencer Arrasmith*
+*Akshit Shah*
 ```
 
 ### Description
