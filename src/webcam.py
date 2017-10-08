@@ -51,7 +51,7 @@ triggerSwitch = False  # if true, keyborad simulator works
 firstFrame = None
 
 img_unpressed = cv2.imread("pics/unpressed.png",-1)
-img_unpressed = cv2.resize(img_unpressed,(100,240),interpolation = cv2.INTER_AREA)
+img_unpressed = cv2.resize(img_unpressed,(79,240),interpolation = cv2.INTER_AREA)
 #img_unpressed_mask = img_unpressed[:,:,3]
 #img_unpressed_mask_inv = cv2.bitwise_not(img_unpressed_mask)
 #img_unpressed = img_unpressed[:,:,0:3]
@@ -98,9 +98,9 @@ try:
 			#mask1_inv = cv2.resize(unpressed_mask_inv, (unpressed_width,unpressed_height))
 			alpha_out = 1-img_un_alpha
 
-			for i in range(6):
+			for i in range(8):
 				for c in range(3):
-					outframe[120:120+unpressed_height,18+100*i:18+unpressed_width+100*i,c] = (img_un_alpha * img_unpressed[:,:,c]+alpha_out*outframe[120:120+unpressed_height,18+100*i:18+unpressed_width+100*i,c])
+					outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c] = (img_un_alpha * img_unpressed[:,:,c]+alpha_out*outframe[120:120+unpressed_height,18+75*i:18+unpressed_width+75*i,c])
 			#cv2.rectangle(outframe,(120,120),(219,360),(255,0,0),2)
 			#cv2.rectangle(outframe,(220,120),(319,360),(255,0,0),2)
 			#cv2.rectangle(outframe,(320,120),(419,360),(255,0,0),2)
@@ -132,24 +132,30 @@ try:
 				#print(centroid_x)
 				#print(centroid_y)
 				
-				if(centroid_x > 20 and centroid_x < 119 and centroid_y > 180 and centroid_y < 420):
+				if(centroid_x > 20 and centroid_x < 95  and centroid_y > 180 and centroid_y < 420):
 					key1 = 1
-					cv2.rectangle(outframe,(20,120),(119,360),(0,255,255),2)
-				elif(centroid_x > 120 and centroid_x < 219 and centroid_y > 180 and centroid_y < 420):
+					cv2.rectangle(outframe,(20,120),(95,360),(0,255,255),2)
+				elif(centroid_x > 95 and centroid_x < 170 and centroid_y > 180 and centroid_y < 420):
 					key2 = 1
-					cv2.rectangle(outframe,(120,120),(219,360),(0,255,255),2)
-				elif(centroid_x > 220 and centroid_x < 319 and centroid_y > 180 and centroid_y < 420):
+					cv2.rectangle(outframe,(95,120),(170,360),(255,0,255),2)
+				elif(centroid_x > 170 and centroid_x < 245 and centroid_y > 180 and centroid_y < 420):
 					key3 = 1
-					cv2.rectangle(outframe,(220,120),(319,360),(0,255,255),2)
-				elif(centroid_x > 320 and centroid_x < 419 and centroid_y > 180 and centroid_y < 420):
+					cv2.rectangle(outframe,(170,120),(245,360),(255,255,0),2)
+				elif(centroid_x > 245 and centroid_x < 320 and centroid_y > 180 and centroid_y < 420):
 					key4 = 1
-					cv2.rectangle(outframe,(320,120),(419,360),(0,255,255),2)
-				elif(centroid_x > 420 and centroid_x < 519 and centroid_y > 180 and centroid_y < 420):
+					cv2.rectangle(outframe,(245,120),(320,360),(255,0,0),2)
+				elif(centroid_x > 320 and centroid_x < 395 and centroid_y > 180 and centroid_y < 420):
 					key5 = 1
-					cv2.rectangle(outframe,(420,120),(519,360),(0,255,255),2)
-				elif(centroid_x > 520 and centroid_x < 639 and centroid_y > 160 and centroid_y < 430):
+					cv2.rectangle(outframe,(320,120),(395,360),(0,255,0),2)
+				elif(centroid_x > 395 and centroid_x < 470 and centroid_y > 160 and centroid_y < 430):
 					key6 = 1
-					cv2.rectangle(outframe,(520,120),(639,360),(0,255,255),2)
+					cv2.rectangle(outframe,(395,120),(470,360),(0,255,255),2)
+				elif(centroid_x > 470 and centroid_x < 545 and centroid_y > 160 and centroid_y < 430):
+					key7 = 1
+					cv2.rectangle(outframe,(470,120),(545,360),(255,0,255),2)
+				elif(centroid_x > 545 and centroid_x < 620 and centroid_y > 160 and centroid_y < 430):
+					key8 = 1
+					cv2.rectangle(outframe,(545,120),(620,360),(255,255,0),2)
 			hdmi_out.writeframe(outframe)	
 			if key1 == 1:
 				audioout.load("notes/Gb3.pdm")
