@@ -1,13 +1,13 @@
-# **OpenCV Air Mouse**
+# **OpenCV Air Keyboard**
 
 ## Welcome to our Xilinx hackathon 2017 repository!
 
 ### Team Members
 ```
-*Chase Stewart*
-*Snehal Sanghvi*
-*Spencer Arrasmith*
-*Akshit Shah*
+Chase Stewart
+Snehal Sanghvi
+Spencer Arrasmith
+Akshit Shah
 ```
 
 ### Description
