@@ -25,7 +25,9 @@ At the lower (yet abstracted level), we make use of overlays or bitstreams, whic
 
 ### Licencing
 ```
-This code is Open-Sourced and is compatible with the Jupyter notebook project. We have made an effort to develop this project to be as modular as well and we hope other developers will build of of this code and suggest us on how to improve upon the application. 
+This code is Open-Sourced and is compatible with the Jupyter notebook project. 
+We have made an effort to develop this project to be as modular as well and 
+we hope other developers will build of of this code and suggest us on how to improve upon the application. 
 ```
 
 ### RunMe:
