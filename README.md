@@ -1,4 +1,4 @@
-# **OpenCV Air Keyboard**
+# **Xilinx Hackathon PYNQ-Z1 Air Keyboard**
 
 ## Welcome to our Xilinx hackathon 2017 repository!
 
